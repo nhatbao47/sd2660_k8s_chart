@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.mongo.name }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ .Values.mongo.name }}
+  serviceName: {{ .Values.mongo.name }}
+  replicas: {{ .Values.mongo.replicaCount }}
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.mongo.name }}
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: {{ .Values.mongo.name }}
+        image: "{{ .Values.mongo.image.repository }}:{{ .Values.mongo.image.tag }}"
+        ports:
+          - containerPort: {{ .Values.mongo.service.targetPort }}
+        envFrom:
+         - configMapRef:             
+               name: mongo-config
+         - secretRef:
+             name: mongo-secrets
+        volumeMounts:
+            - name: data-volume
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: data-volume
+      spec:
+        storageClassName: {{ .Values.mongo.storage.className }}
+        accessModes:
+          - {{ .Values.mongo.storage.accessModes | toYaml | trim | quote }}
+        resources:
+          requests:
+            storage: {{ .Values.mongo.storage.size }}

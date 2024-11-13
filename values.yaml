@@ -1,0 +1,46 @@
+backend:
+  name: "backend"
+  replicaCount: 1
+  image:
+    repository: 495016266100.dkr.ecr.ap-southeast-1.amazonaws.com/backend
+    tag: "17"
+    pullPolicy: Always
+  service:
+    enabled: true
+    type: ClusterIP
+    port: 3000
+    targetPort: 3000
+
+frontend:
+  name: "frontend"
+  replicaCount: 1
+  image:
+    repository: 495016266100.dkr.ecr.ap-southeast-1.amazonaws.com/frontend
+    tag: "17"
+    pullPolicy: Always
+  service:
+    enabled: true
+    type: ClusterIP
+    port: 3000
+    targetPort: 3000
+
+mongo:
+  name: "mongo"
+  replicaCount: 1
+  image:
+    repository: mongo
+    tag: "latest"
+  service:
+    enabled: true
+    type: ClusterIP
+    port: 27017
+    targetPort: 27017
+  config:
+    username: user
+  secrets:
+    password: cGFzc3dvcmQK  # Base64 encoded password
+  storage:
+    className: mongo-sc
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
