@@ -41,6 +41,5 @@ mongo:
     password: cGFzc3dvcmQK  # Base64 encoded password
   storage:
     className: mongo-sc
-    accessModes:
-      - ReadWriteOnce
+    accessModes: ReadWriteOnce
     size: 1Gi
