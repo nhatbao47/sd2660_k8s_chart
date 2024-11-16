@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sd2660-devops
+  namespace: argocd
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: 'https://github.com/nhatbao47/sd2660_k8s_chart'
+    targetRevision: HEAD
+    path: '.'
+    helm:
+      values: |
+        backend:
+          image:
+            repository: 495016266100.dkr.ecr.ap-southeast-1.amazonaws.com/backend
+            tag: "{{ .Values.backend.image.tag }}"
+        frontend:
+          image:
+            repository: 495016266100.dkr.ecr.ap-southeast-1.amazonaws.com/frontend
+            tag: "{{ .Values.frontend.image.tag }}"
+        mongo:
+          image:
+            repository: mongo
+            tag: "{{ .Values.mongo.image.tag }}"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
