@@ -31,9 +31,9 @@ spec:
     - metadata:
         name: data-volume
       spec:
-        storageClassName: {{ .Values.mongo.storage.className }}
+        #storageClassName: {{ .Values.mongo.storage.className }}
         accessModes:
-          - {{ .Values.mongo.storage.accessModes | toYaml | trim | quote }}
+          - "ReadWriteOnce" #{{ .Values.mongo.storage.accessModes | toYaml | trim | quote }}
         resources:
           requests:
             storage: {{ .Values.mongo.storage.size }}
