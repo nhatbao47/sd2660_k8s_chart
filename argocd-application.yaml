@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   destination:
-    namespace: default
+    namespace: app-argocd
     server: https://kubernetes.default.svc
   source:
     repoURL: 'https://github.com/nhatbao47/sd2660_k8s_chart'
