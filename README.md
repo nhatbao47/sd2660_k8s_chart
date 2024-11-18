@@ -1,31 +1,33 @@
 # sd2660_k8s
 
+# Connect to EKS in terminal for kubectl
+aws configure
+aws eks --region ap-southeast-1 update-kubeconfig --name sd2660-devops-eks
+
+# Install ArgoCD
+
 kubectl create namespace argocd
+
 kubectl apply -n argocd -f  https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-kubectl  -n argocd get secret argocd-initial-admin-secret -o jsonpath=”{.data.password}” 
+
+kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath='{.data.password}' | base64 --decode; echo
+
 kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+# Launch application
 
 kubectl create namespace app-argocd
 
-Create new project
-
-argocd login localhost:8080
-
-argocd app create sd2660-devops \
-    --repo https://github.com/nhatbao47/sd2660_k8s.git \
-    --path charts/my-chart \
-    --helm-chart my-chart \
-    --dest-server https://kubernetes.default.svc \
-    --dest-namespace my-namespace \
-    --sync-policy automated
-
-argocd app create demo \
-  --repo https://github.com/nhatbao47/sd2660_k8s.git \
-  --path "." \
-  --dest-server https://kubernetes.default.svc \
-  --dest-namespace app-argocd
+kubectl apply -f argocd-application.yaml
 
 kubectl port-forward -n app-argocd svc/frontend 3000:3000
 
-kubectl delete namespace argocd
-kubectl delete namespace app-argocd
+argocd login localhost:8080 --username admin --password 12345678 --insecure
+
+Argo CD Image Updater
+#install
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/stable/manifests/install.yaml
+
+#apply config
+
+kubectl apply -f manifests/argocd-image-updater-cm.yaml
