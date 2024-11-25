@@ -4,6 +4,7 @@ metadata:
   name: argocd-image-updater-config
   namespace: argocd
 data:
+  log.level: debug
   repositories: |
     - name: "ecr-repository"
       type: "ecr"
@@ -12,7 +13,7 @@ data:
   images: |
     - name: "495016266100.dkr.ecr.ap-southeast-1.amazonaws.com/backend"
       updates:
-        - version: "17"
+        - strategy: "latest"
     - name: "495016266100.dkr.ecr.ap-southeast-1.amazonaws.com/frontend"
       updates:
-        - version: "17"
+        - strategy: "latest"

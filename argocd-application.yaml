@@ -3,6 +3,11 @@ kind: Application
 metadata:
   name: sd2660-devops
   namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/backend.update-strategy: "latest"
+    argocd-image-updater.argoproj.io/backend.image: "495016266100.dkr.ecr.ap-southeast-1.amazonaws.com/backend"
+    argocd-image-updater.argoproj.io/frontend.update-strategy: "latest"
+    argocd-image-updater.argoproj.io/frontend.image: "495016266100.dkr.ecr.ap-southeast-1.amazonaws.com/frontend"
 spec:
   project: default
   destination:
