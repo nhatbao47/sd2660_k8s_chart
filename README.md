@@ -28,6 +28,13 @@ Argo CD Image Updater
 #install
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/stable/manifests/install.yaml
 
+kubectl get pods -n app-argocd -o jsonpath="{.items[*].spec.containers[?(@.name=='backend')].image}"
+
+
 #apply config
 
 kubectl apply -f manifests/argocd-image-updater-cm.yaml
+
+kubectl rollout restart deployment/argocd-image-updater -n argocd
+
+kubectl logs -f deployment/argocd-image-updater -n argocd
